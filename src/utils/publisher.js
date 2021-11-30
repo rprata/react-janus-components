@@ -39,7 +39,8 @@ export function publishToRoom(janus, opaqueId, room, secret,
                                     "request": "join",
                                     "room": data.room,
                                     "ptype": "publisher",
-                                    "display": username
+                                    "display": username,
+                                    "pin": pin || ""
                                 };
                                 sfutest.send({ message: register });
 
@@ -55,7 +56,8 @@ export function publishToRoom(janus, opaqueId, room, secret,
                         "request": "join",
                         "room": room,
                         "ptype": "publisher",
-                        "display": username || ""
+                        "display": username || "",
+                        "pin": pin || ""
                     };
                     sfutest.send({ message: register });
                 }

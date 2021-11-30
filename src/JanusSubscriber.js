@@ -6,7 +6,7 @@ import { subscribeRemoteFeed, sendData } from './utils/subscriber';
 import JanusPlayer from './JanusPlayer';
 import JanusChat from './JanusChat';
 
-const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, children }) => {
+const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, pin, children }) => {
     const videoArea = useRef(null);
     const [playerState, setPlayerState] = useState("Ready");
     const [sfutest, setSfuTest] = useState(null);
@@ -38,7 +38,7 @@ const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, children }) =
     }
     
     useEffect(() => {
-        if(!janus || !room || !pubId || !pubPvtId){
+        if(!janus || !room || !pubId || !pubPvtId || !pin){
             return;
         }
         publishToRoom(janus, opaqueId, room, null, null, null, false, 
@@ -55,7 +55,7 @@ const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, children }) =
 
                         const publisher = list[0];
                         const { id, display, audio_codec, video_codec} = publisher;
-                        subscribeRemoteFeed(janus, opaqueId, room, id, pubPvtId, display, audio_codec, video_codec, remoteFeedCallback);
+                        subscribeRemoteFeed(janus, opaqueId, room, id, pubPvtId, pin, display, audio_codec, video_codec, remoteFeedCallback);
                     }
                 }else if(eventType === "publishers"){
                     if(data.publishers !== undefined && data.publishers !== null) {
@@ -67,7 +67,7 @@ const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, children }) =
 
                         const publisher = list[0];
                         const { id, display, audio_codec, video_codec} = publisher;
-                        subscribeRemoteFeed(janus, opaqueId, room, id, pubPvtId, display, audio_codec, video_codec, remoteFeedCallback);                    }
+                        subscribeRemoteFeed(janus, opaqueId, room, id, pubPvtId, pin, display, audio_codec, video_codec, remoteFeedCallback);                    }
                 }else if(eventType === "leaving" || eventType === "unpublished"){
                     if(remoteFeed !== null){
                         remoteFeed.detach();
@@ -75,7 +75,7 @@ const JanusSubscriber = ({ janus, opaqueId, room, pubId, pubPvtId, children }) =
                 }
             }
         );
-    }, [janus, room, pubId, pubPvtId])
+    }, [janus, room, pubId, pubPvtId, pin])
 
     const playerElement = children ? children : <JanusPlayer />;
     
